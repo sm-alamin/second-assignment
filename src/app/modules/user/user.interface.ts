@@ -26,7 +26,7 @@ export type Order = {
     fullName: FullName;
     age: number;
     email: string;
-    isActive: 'Active'| 'Inactive';
+    isActive: boolean;
     hobbies: string[];
     address: Address;
     orders: Order[];
