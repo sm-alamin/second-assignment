@@ -21,7 +21,7 @@ const fullNameSchema = new Schema<FullName>({
   });
 // Main Schema
 const userSchema = new Schema<User>({
-    userId: { type: String, required: true },
+    userId: { type: Number, required: true },
     username: { type: String, required: true },
     password: { type: String, required: true },
     fullName: { type: fullNameSchema, required: true },
@@ -34,4 +34,4 @@ const userSchema = new Schema<User>({
   });
 
 
-  const User = model<User>('User', userSchema)
+ export const UserModel = model<User>('User', userSchema)

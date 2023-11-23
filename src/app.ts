@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express, { Application, Request, Response } from 'express';
+import { userRouter } from './app/modules/user/user.route';
 
 const app: Application = express();
 
@@ -8,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 // application routes
-
+app.use('/api/users',userRouter);
 
 const getAController = (req: Request, res: Response) => {
   const success = "successfully connected";
