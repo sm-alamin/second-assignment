@@ -51,7 +51,7 @@ Check out the live demo: [User Management App](https://assignment-2-umber-seven.
     npm run start:dev
     ```
 
-6. Open your browser and navigate to [http://localhost:3000](http://localhost:5000).
+6. Open your browser and navigate to (http://localhost:5000).
 
 ## API Endpoints
 
