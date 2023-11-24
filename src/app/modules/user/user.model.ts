@@ -30,7 +30,7 @@ const userSchema = new Schema<User>({
     isActive: { type: Boolean, required: true },
     hobbies: { type: [String], required: true },
     address: { type: addressSchema, required: true },
-    orders: { type: [orderSchema], required: true },
+    orders: { type: [orderSchema], required: false },
   });
 
 

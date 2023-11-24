@@ -1,10 +1,14 @@
 import { Request, Response } from 'express';
 import { userServices } from './user.service';
+import userValidationSchema from './user.validation';
+
+
 
 const createUser = async (req: Request, res: Response) => {
   try {
     const  userData  = req.body;
-    const result = await userServices.createUserIntoDB(userData);
+    const validatedUser = userValidationSchema.parse(userData);
+    const result = await userServices.createUserIntoDB(validatedUser);
 
     res.status(200).json({
       success: true,
@@ -13,6 +17,14 @@ const createUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.log(error)
+    res.status(400).json({
+      success: false,
+      message: 'Validation failed',
+      error: {
+        code: 400,
+        description: 'Validation failed',
+      },
+    });
   }
 };
 const getAlUsers = async (req: Request, res:Response) => {
