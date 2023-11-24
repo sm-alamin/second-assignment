@@ -3,7 +3,7 @@ import { userServices } from './user.service';
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const { user: userData } = req.body;
+    const  userData  = req.body;
     const result = await userServices.createUserIntoDB(userData);
 
     res.status(200).json({
@@ -18,7 +18,7 @@ const createUser = async (req: Request, res: Response) => {
 const getAlUsers = async (req: Request, res:Response) => {
 try {
     const result = await userServices.getAllUsersFromDB();
-    if (result === null) {
+    if (!result) {
       return res.status(404).json({
         success: false,
         message: 'User not found',
@@ -95,10 +95,141 @@ const deleteUser = async (req: Request, res: Response) => {
     console.log(error);
   }
 };
+
+
+const addOrder = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const userIdNumber = parseInt(userId);
+    const orderData: Order = req.body;
+
+    const user = await userServices.getSingleUserFromDB(userIdNumber);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+
+    if (!user.orders) {
+      user.orders = [];
+    }
+
+    user.orders.push(orderData);
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Order created successfully!',
+      data: null,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+      error: {
+        code: 500,
+        description: 'Internal Server Error',
+      },
+    });
+  }
+};
+
+const getAllOrders = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const userIdNumber = parseInt(userId);
+
+    const user = await userServices.getSingleUserFromDB(userIdNumber);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+
+    const orders = user.orders || [];
+
+    res.status(200).json({
+      success: true,
+      message: 'Orders fetched successfully!',
+      data: {
+        orders,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+      error: {
+        code: 500,
+        description: 'Internal Server Error',
+      },
+    });
+  }
+};
+
+const calculateTotalPrice = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const userIdNumber = parseInt(userId);
+
+    const user = await userServices.getSingleUserFromDB(userIdNumber);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+
+    const orders = user.orders || [];
+    const totalPrice = orders.reduce((total, order) => total + order.price * order.quantity, 0);
+
+    res.status(200).json({
+      success: true,
+      message: 'Total price calculated successfully!',
+      data: {
+        totalPrice,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+      error: {
+        code: 500,
+        description: 'Internal Server Error',
+      },
+    });
+  }
+};
+
+
 export const userController = {
     createUser,
     getAlUsers,
     getSingleUser,
     updateUser,
     deleteUser,
+    addOrder,
+    getAllOrders,
+    calculateTotalPrice,
 }
