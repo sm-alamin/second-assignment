@@ -18,6 +18,12 @@ const createUser = async (req: Request, res: Response) => {
 const getAlUsers = async (req: Request, res:Response) => {
 try {
     const result = await userServices.getAllUsersFromDB();
+    if (result === null) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
     res.status(200).json({
         success: true,
         message: 'Users are  retrieve successfully',
@@ -32,6 +38,7 @@ try {
     const {userId} = req.params;
     const userIdNumber = parseInt(userId)
     const result = await userServices.getSingleUserFromDB(userIdNumber);
+    
     res.status(200).json({
         success: true,
         message: 'Single User is  retrieve successfully',
@@ -65,9 +72,33 @@ const updateUser = async (req: Request, res: Response) => {
     console.log(error);
   }
 };
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const userIdNumber = parseInt(userId);
+
+    const result = await userServices.deleteUserFromDB(userIdNumber);
+
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User deleted successfully',
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 export const userController = {
     createUser,
     getAlUsers,
     getSingleUser,
     updateUser,
+    deleteUser,
 }
