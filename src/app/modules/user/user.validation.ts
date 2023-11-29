@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { fullNameSchema, addressSchema, orderSchema } from './user.validation';
 
 export const fullNameSchema = z.object({
   firstName: z.string().min(1), 

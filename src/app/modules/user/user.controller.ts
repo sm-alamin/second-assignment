@@ -113,7 +113,7 @@ const addOrder = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const userIdNumber = parseInt(userId);
-    const orderData: Order = req.body;
+    const orderData = req.body;
 
     const user = await userServices.getSingleUserFromDB(userIdNumber);
 

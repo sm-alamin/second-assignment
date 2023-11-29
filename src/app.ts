@@ -12,7 +12,7 @@ app.use(cors());
 app.use('/api/users',userRouter);
 
 const getAController = (req: Request, res: Response) => {
-  const success = "successfully connected";
+  const success = "Welcome,to our user management app";
   res.send(success);
 };
 
